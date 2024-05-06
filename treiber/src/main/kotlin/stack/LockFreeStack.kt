@@ -7,28 +7,29 @@ import java.util.concurrent.atomic.AtomicReference
 class LockFreeStack<T> : Stack<T> {
     private val head = AtomicReference<Node<T>?>()
 
-    override fun push(x: T) {
-        val newH = Node(x)
+    override fun push(value: T) {
+        val newH = Node(value)
 
-        do {
-            val tmpH = head.get()
-            newH.next = tmpH
-        } while (!(head.compareAndSet(tmpH, newH)))
-
-        return
+        while (true) {
+            val lastH = head.get()
+            newH.next = lastH
+            if (head.compareAndSet(lastH, newH)) {
+                return
+            }
+        }
     }
 
     override fun pop(): T? {
         while (true) {
-            val tmpH = head.get() ?: return null
-            if (head.compareAndSet(tmpH, tmpH.next)) {
-                return tmpH.value
+            val lastH = head.get() ?: return null
+            if (head.compareAndSet(lastH, lastH.next)) {
+                return lastH.value
             }
         }
     }
 
     override fun top(): T? {
-        val tmpH = head.get() ?: return null
-        return tmpH.value
+        val lastH = head.get() ?: return null
+        return lastH.value
     }
 }

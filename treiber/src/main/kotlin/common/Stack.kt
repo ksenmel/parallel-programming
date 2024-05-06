@@ -2,7 +2,7 @@ package common
 
 interface Stack<T> {
 
-    fun push(x: T)
+    fun push(value: T)
 
     fun pop(): T?
 
