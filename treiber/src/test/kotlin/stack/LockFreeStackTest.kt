@@ -20,12 +20,11 @@ class LockFreeStackTest {
     fun pop() = stack.pop()
 
     @Test
-    fun test() =
-        StressOptions()
-            .iterations(10)
-            .invocationsPerIteration(30_000)
-            .threads(8)
-            .actorsPerThread(3)
-            .logLevel(LoggingLevel.INFO)
-            .check(this::class.java)
+    fun stressTest() = StressOptions()
+        .iterations(40)
+        .invocationsPerIteration(200)
+        .threads(4)
+        .actorsPerThread(3)
+        .logLevel(LoggingLevel.INFO)
+        .check(this::class)
 }

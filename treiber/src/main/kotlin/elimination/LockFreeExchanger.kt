@@ -16,6 +16,7 @@ class LockFreeExchanger<T> {
 
     private val slot = AtomicStampedReference<T?>(null, EMPTY)
 
+    @Throws(TimeoutException::class)
     fun exchange(myItem: T?, timeout: Long, unit: TimeUnit): T? {
         val nanos = unit.toNanos(timeout)
         val timeBound = System.nanoTime() + nanos
@@ -53,6 +54,7 @@ class LockFreeExchanger<T> {
                 BUSY -> {
                     // do nothing, just continue the loop
                 }
+                else -> throw IllegalStateException("Illegal State")
             }
         }
     }

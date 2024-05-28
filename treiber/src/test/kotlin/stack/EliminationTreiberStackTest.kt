@@ -1,15 +1,15 @@
 package stack
 
-import elimination.EliminationBackoffStack
+import elimination.EliminationTreiberStack
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.check
 import org.jetbrains.kotlinx.lincheck.LoggingLevel
 import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
 import org.junit.jupiter.api.Test
 
-class EliminationBackoffStackTest {
+class EliminationTreiberStackTest {
     private val stack =
-        EliminationBackoffStack<Int>(10)
+        EliminationTreiberStack<Int>(10)
 
     @Operation
     fun top() = stack.top()
@@ -21,12 +21,11 @@ class EliminationBackoffStackTest {
     fun pop() = stack.pop()
 
     @Test
-    fun test() =
-        StressOptions()
-            .iterations(10)
-            .invocationsPerIteration(10)
-            .threads(8)
-            .actorsPerThread(3)
-            .logLevel(LoggingLevel.INFO)
-            .check(this::class.java)
+    fun stressTest() = StressOptions()
+        .iterations(40)
+        .invocationsPerIteration(200)
+        .threads(3)
+        .actorsPerThread(3)
+        .logLevel(LoggingLevel.INFO)
+        .check(this::class)
 }
